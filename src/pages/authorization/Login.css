@@ -1,0 +1,67 @@
+/* Background & container */
+.login-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f0eefc, #d8cbe0);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Card styling */
+.login-card {
+  width: 400px;
+  background-color: #ffffffdd;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Title & subtitle */
+.login-title {
+  color: #886cacff;
+  font-weight: 700;
+}
+
+.login-subtitle {
+  color: #555555;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.login-btn {
+  background: #886cacff;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #744ca1ff;
+  transform: translateY(-2px);
+}
+
+/* Register link */
+.register-link {
+  color: #886cacff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: #744ca1ff;
+}
+
+/* OR text */
+.login-or {
+  color: #888888;
+  font-weight: 500;
+}
