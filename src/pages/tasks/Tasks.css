@@ -1,0 +1,21 @@
+/* Center all table headers */
+.custom-table thead th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Center specific body columns — based on column position */
+.custom-table tbody td:nth-child(4),
+.custom-table tbody td:nth-child(5),
+.custom-table tbody td:nth-child(6),
+.custom-table tbody td:nth-child(7),
+.custom-table tbody td:nth-child(8) {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Optional: make Task and Description slightly nicer */
+.custom-table tbody td:nth-child(1),
+.custom-table tbody td:nth-child(2) {
+  text-align: left;
+}
