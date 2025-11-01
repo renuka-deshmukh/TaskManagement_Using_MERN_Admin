@@ -15,7 +15,7 @@ const ProjectList = () => {
 
 
   // ✅ Fetch all data
- const fetchData = async () => {
+  const fetchData = async () => {
     try {
       const response = await getAllProjects();
       if (response.data.success) {
@@ -86,8 +86,9 @@ const ProjectList = () => {
                   <div className="text-muted small">{project.description}</div>
                 </td>
                 <td>{project.description}</td>
-                <td>{project.startDate}</td>
-                <td>{project.endDate}</td>
+                <td>{project.startDate ? new Date(project.startDate).toLocaleDateString('en-GB') : '-'}</td>
+                <td>{project.endDate ? new Date(project.endDate).toLocaleDateString('en-GB') : '-'}</td>
+
                 <td>{project.addedBy?.name}</td>
                 <td>{project.status}</td>
                 <td>

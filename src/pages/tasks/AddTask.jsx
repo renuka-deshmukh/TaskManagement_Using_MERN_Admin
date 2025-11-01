@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllProjects } from "../../apis/projectApis";
+import { getAllUsers } from "../../apis/userApis"
 import { toast } from "react-toastify";
 
 const AddTask = ({ show, onClose, onSubmit }) => {
@@ -10,19 +11,23 @@ const AddTask = ({ show, onClose, onSubmit }) => {
     const [priority, setPriority] = useState("Low");
     const [status, setStatus] = useState("Planned");
     const [projects, setProjects] = useState([]);
+    const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("");
     const [selectedProject, setSelectedProject] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await getAllProjects();
-                if (res.data.success) setProjects(res.data.projects);
+                const proRes = await getAllProjects();
+                const userRes = await getAllUsers();
+                if (proRes.data.success) setProjects(proRes.data.projects);
+                 if (userRes.data.success) setUsers(userRes.data.users);
+
             } catch (error) {
                 toast.error("Failed to load projects");
             }
         };
-        fetchProjects();
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -33,6 +38,7 @@ const AddTask = ({ show, onClose, onSubmit }) => {
             setEndDate("");
             setPriority("Low");
             setStatus("Planned");
+            setSelectedUser("")
             setSelectedProject("");
         }
     }, [show]);
@@ -44,6 +50,7 @@ const AddTask = ({ show, onClose, onSubmit }) => {
 
         if (!title.trim()) return alert("Please enter task title");
         if (!selectedProject) return alert("Please select a project");
+        if (!setSelectedUser) return alert("Please select a user");
         if (!startDate) return alert("Please select start date");
         if (!endDate) return alert("Please select end date");
         if (!priority) return alert("Please select priority");
@@ -51,7 +58,8 @@ const AddTask = ({ show, onClose, onSubmit }) => {
         const taskData = {
             title,
             description,
-            projectId: selectedProject, // ✅ send selected project
+            projectId: selectedProject,
+            assignTo: selectedUser,
             startDate,
             endDate,
             priority,
@@ -108,7 +116,10 @@ const AddTask = ({ show, onClose, onSubmit }) => {
                                 ))}
                             </select>
 
-                            <select onChange={(e) => setAssignTo(e.target.value)} value={assignTo}>
+                            <select
+                            className="form-control mb-3"
+                                value={selectedUser}
+                             onChange={(e) => setSelectedUser(e.target.value)}>
                                 <option value="">Select user</option>
                                 {users.map((user) => (
                                     <option key={user._id} value={user._id}>

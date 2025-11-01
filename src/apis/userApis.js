@@ -8,6 +8,8 @@ export const registerUser = (adminData) =>
 export const loginUser = (credentials) =>
   axiosInstance.post("/user/login", credentials);
 
+export const getAllUsers = () => axiosInstance.get("/user/getAllUsers");
+
 // Get User Info by ID
 export const getUserInfoById = (userId) =>
   axiosInstance.get(`/user/getUserInfo/${userId}`);
