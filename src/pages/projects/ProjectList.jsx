@@ -83,12 +83,11 @@ const ProjectList = () => {
               <tr key={project._id || i}>
                 <td className="fw-semibold">
                   {project.name}
-                  <div className="text-muted small">{project.description}</div>
+                  {/* <div className="text-muted small">{project.description}</div> */}
                 </td>
                 <td>{project.description}</td>
                 <td>{project.startDate ? new Date(project.startDate).toLocaleDateString('en-GB') : '-'}</td>
                 <td>{project.endDate ? new Date(project.endDate).toLocaleDateString('en-GB') : '-'}</td>
-
                 <td>{project.addedBy?.name}</td>
                 <td>{project.status}</td>
                 <td>

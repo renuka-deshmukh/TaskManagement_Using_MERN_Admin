@@ -1,21 +1,33 @@
-/* Center all table headers */
-.custom-table thead th {
+.custom-table th {
   text-align: center;
   vertical-align: middle;
+  font-weight: 600;
+  background-color: #f8f9fa;
+  color: #333;
+  letter-spacing: 0.5px;
 }
 
-/* Center specific body columns — based on column position */
-.custom-table tbody td:nth-child(4),
-.custom-table tbody td:nth-child(5),
-.custom-table tbody td:nth-child(6),
-.custom-table tbody td:nth-child(7),
-.custom-table tbody td:nth-child(8) {
-  text-align: center;
+.custom-table td {
   vertical-align: middle;
+  padding: 12px 10px;
 }
 
-/* Optional: make Task and Description slightly nicer */
-.custom-table tbody td:nth-child(1),
-.custom-table tbody td:nth-child(2) {
-  text-align: left;
+.custom-table tr:hover {
+  background-color: #f3f6ff !important;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #2575fc;
+  border-color: #2575fc;
+}
+
+.pagination .page-link {
+  color: #2575fc;
+  border: 1px solid #dee2e6;
 }
