@@ -69,7 +69,7 @@ const ProjectList = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Description</th>
+            <th style={{ width: "220px" }}>Description</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Added By</th>

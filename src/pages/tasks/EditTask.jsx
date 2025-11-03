@@ -78,7 +78,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              name="name"
+              name="title"
               value={formData.title}
               onChange={handleChange}
               placeholder="Task Name"
@@ -97,7 +97,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
             <div className="d-flex gap-3 mb-3">
               <input
                 type="Date"
-                name="Start Date"
+                name="startDate"
                 value={formData.startDate}
                 onChange={handleChange}
                 placeholder="Start Date"
@@ -105,7 +105,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
               />
               <input
                 type="Date"
-                name="End Date"
+                name="endDate"
                 value={formData.endDate}
                 onChange={handleChange}
                 placeholder="End Date"

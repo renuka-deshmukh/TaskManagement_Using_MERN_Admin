@@ -48,12 +48,14 @@ const AddTask = ({ show, onClose, onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        
         if (!title.trim()) return alert("Please enter task title");
         if (!selectedProject) return alert("Please select a project");
-        if (!setSelectedUser) return alert("Please select a user");
+        if (!selectedUser) return alert("Please select a user");
         if (!startDate) return alert("Please select start date");
         if (!endDate) return alert("Please select end date");
         if (!priority) return alert("Please select priority");
+    
 
         const taskData = {
             title,
@@ -67,6 +69,16 @@ const AddTask = ({ show, onClose, onSubmit }) => {
         };
 
         onSubmit(taskData);
+
+         if (taskData.startDate && taskData.endDate) {
+    const start = new Date(taskData.startDate);
+    const end = new Date(taskData.endDate);
+
+    if (end < start) {
+      toast.error("End date cannot be before start date");
+      return; // Stop form submission
+    }
+  }
     };
 
     return (
@@ -139,6 +151,7 @@ const AddTask = ({ show, onClose, onSubmit }) => {
                                 type="date"
                                 className="form-control mb-3"
                                 value={endDate}
+                                //  min={taskData.startDate} 
                                 onChange={(e) => setEndDate(e.target.value)}
                             />
 

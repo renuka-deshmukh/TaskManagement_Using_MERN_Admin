@@ -8,6 +8,7 @@
 }
 
 .custom-table td {
+   text-align: center;
   vertical-align: middle;
   padding: 12px 10px;
 }
