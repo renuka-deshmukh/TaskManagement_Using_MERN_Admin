@@ -11,9 +11,16 @@ const AuthProvider = ({ children }) => {
     if (storedUser) setLoggedUser(JSON.parse(storedUser));
   }, []);
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, avatar) => {
     try {
-      const res = await registerUser({ name, email, password });
+
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      if (avatar) formData.append("avatar", avatar)
+
+      const res = await registerUser(formData);
       return res.data.msg;
     } catch (err) {
       console.error(err);
@@ -32,10 +39,10 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem(
           "loggedInAdmin",
-          JSON.stringify({ email, name: res.data.name, user_id: res.data.user_id })
+          JSON.stringify({ email, name: res.data.name, user_id: res.data.user_id, avatar: avatarUrl  })
         );
 
-        setLoggedUser({ email, name: res.data.name, user_id: res.data.user_id });
+        setLoggedUser({ email, name: res.data.name, user_id: res.data.user_id,  avatar: avatarUrl  });
 
         // ✅ Return full response to handle in Login.jsx
         return { success: true, msg: res.data.msg };;

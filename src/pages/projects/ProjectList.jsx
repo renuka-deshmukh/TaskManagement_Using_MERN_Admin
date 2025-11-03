@@ -12,6 +12,9 @@ const ProjectList = () => {
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+   const [currentPage, setCurrentPage] = useState(1);
+      const projectsPerPage = 5;
+  
 
 
   // ✅ Fetch all data
@@ -34,6 +37,14 @@ const ProjectList = () => {
     fetchData();
   }, []);
 
+    const indexOfLastProject = currentPage * projectsPerPage;
+    const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+    const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
+    const totalPages = Math.ceil(projects.length / projectsPerPage);
+
+    const handlePageChange = (page) => setCurrentPage(page);
+
+
   // ✅ Add project handler
   const handleAddProject = async (formData) => {
     try {
@@ -46,6 +57,20 @@ const ProjectList = () => {
       toast.error("Error adding project");
     }
   };
+
+  const getStatusText = (status) => {
+        switch (status) {
+            case "Planned":
+                return <span style={{ color: "gray", fontWeight: "600" }}>Planned</span>;
+            case "In Progress":
+                return <span style={{ color: "#0d6efd", fontWeight: "600" }}>In Progress</span>; // blue
+            case "Completed":
+                return <span style={{ color: "green", fontWeight: "600" }}>Completed</span>;
+            default:
+                return <span style={{ color: "black" }}>{status}</span>;
+        }
+    };
+
 
   return (
     <div className="card shadow-sm p-3 bg-white rounded">
@@ -78,8 +103,8 @@ const ProjectList = () => {
           </tr>
         </thead>
         <tbody>
-          {projects.length > 0 ? (
-            projects.map((project, i) => (
+          {currentProjects.length > 0 ? (
+            currentProjects.map((project, i) => (
               <tr key={project._id || i}>
                 <td className="fw-semibold">
                   {project.name}
@@ -89,7 +114,7 @@ const ProjectList = () => {
                 <td>{project.startDate ? new Date(project.startDate).toLocaleDateString('en-GB') : '-'}</td>
                 <td>{project.endDate ? new Date(project.endDate).toLocaleDateString('en-GB') : '-'}</td>
                 <td>{project.addedBy?.name}</td>
-                <td>{project.status}</td>
+                <td>{getStatusText(project.status)}</td>
                 <td>
                   <button
                     className="btn btn-sm btn-outline-primary me-2"
@@ -113,6 +138,28 @@ const ProjectList = () => {
           )}
         </tbody>
       </table>
+
+        {/* ✅ Pagination */}
+            {totalPages > 1 && (
+                <div className="d-flex justify-content-center mt-3">
+                    <nav>
+                        <ul className="pagination mb-0">
+                            {Array.from({ length: totalPages }, (_, i) => (
+                                <li
+                                    key={i}
+                                    className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                                    onClick={() => handlePageChange(i + 1)}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <span className="page-link">{i + 1}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+            )}
+
+
 
       {/* ✅ Add Project Modal */}
       <AddProject

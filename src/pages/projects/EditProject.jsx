@@ -11,13 +11,13 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
     endDate: "",
     status: ""
   });
-
+  
   useEffect(() => {
     if (project) {
       setFormData({
         name: project.name || "",
         description: project.description || "",
-       startDate: project.startDate?.split("T")[0] || "",
+        startDate: project.startDate?.split("T")[0] || "",
         endDate: project.endDate?.split("T")[0] || "",
         status: project.status || "Planned",
       })
@@ -30,6 +30,16 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.startDate && formData.endDate) {
+    const start = new Date(formData.startDate);
+    const end = new Date(formData.endDate);
+
+    if (end < start) {
+      toast.error("End date cannot be before start date");
+      return; // stop form submission
+    }
+  }
 
     try {
       const response = await updateProject(project._id, formData)
@@ -95,7 +105,7 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
             <div className="d-flex gap-3 mb-3">
               <input
                 type="Date"
-                name="price"
+                name="startDate"
                 value={formData.startDate}
                 onChange={handleChange}
                 placeholder="Start Date"
@@ -103,7 +113,7 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
               />
               <input
                 type="Date"
-                name="quentity"
+                name="endDate"
                 value={formData.endDate}
                 onChange={handleChange}
                 placeholder="End Date"

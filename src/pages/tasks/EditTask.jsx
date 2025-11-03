@@ -33,6 +33,16 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+     if (formData.startDate && formData.endDate) {
+        const start = new Date(formData.startDate);
+        const end = new Date(formData.endDate);
+    
+        if (end < start) {
+          toast.error("End date cannot be before start date");
+          return; // stop form submission
+        }
+      }
+
     try {
       const response = await updateTask(task._id, formData)
       if (response.data.success) {

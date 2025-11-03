@@ -1,15 +1,18 @@
 // src/pages/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FaCubes, FaProjectDiagram } from "react-icons/fa";
+import { FaCubes, FaProjectDiagram, FaUsers } from "react-icons/fa";
 import { getAllProjects } from "../apis/projectApis"; 
 import { getAllTasks } from "../apis/taskApis";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Dashboard.css";
+import { getAllUsers } from "../apis/userApis";
 
 const Dashboard = () => {
   const [projectCount, setProjectCount] = useState(0);
   const [taskCount, setTaskCount] = useState(0); 
+  const [userCount, setUserCount] = useState(0); 
+
 
   // ✅ Fetch counts
   useEffect(() => {
@@ -17,8 +20,10 @@ const Dashboard = () => {
       try {
         const projectRes = await getAllProjects();
         const taskRes = await getAllTasks();
+        const userRes = await getAllUsers();
         if (projectRes.data.success) setProjectCount(projectRes.data.projects.length);
         if (taskRes.data.success) setTaskCount(taskRes.data.tasks.length);
+        if (userRes.data.success) setUserCount(userRes.data.users.length);
         
       } catch (err) {
         console.error("Error fetching counts:", err);
@@ -78,6 +83,24 @@ const Dashboard = () => {
             </div>
             <span className="badge bg-primary rounded-pill fs-6 px-3 py-2">
               {projectCount}
+            </span>
+          </Link>
+
+           <Link
+            to="/user"
+            className="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-4"
+          >
+            <div className="d-flex align-items-center">
+              <FaUsers className="text-primary me-3" size={35} />
+              <div>
+                <h5 className="mb-1 fw-bold">Users</h5>
+                <p className="mb-0 text-muted small">
+                  View and manage all users
+                </p>
+              </div>
+            </div>
+            <span className="badge bg-primary rounded-pill fs-6 px-3 py-2">
+              {userCount}
             </span>
           </Link>
         </div>

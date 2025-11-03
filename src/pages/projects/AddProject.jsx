@@ -23,18 +23,29 @@ const AddProject = ({ show, onClose, onSubmit }) => {
 
   if (!show) return null;
 
- const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  if (!name.trim()) return alert("Please enter project name");
-  if (!startDate) return alert("Please enter start date");
-  if (!endDate) return alert("Please select end date");
+    if (!name.trim()) return alert("Please enter project name");
+    if (!startDate) return alert("Please enter start date");
+    if (!endDate) return alert("Please select end date");
 
-  if (!addedBy) return alert("Admin info not found! Please log in again.");
+    if (!addedBy) return alert("Admin info not found! Please log in again.");
 
-  const projectData = { name, description, startDate, endDate, status, addedBy }; 
-  onSubmit(projectData);
-};
+    const projectData = { name, description, startDate, endDate, status, addedBy };
+    onSubmit(projectData);
+
+    if (projectData.startDate && projectData.endDate) {
+      const start = new Date(projectData.startDate);
+      const end = new Date(projectData.endDate);
+
+      if (end < start) {
+        toast.error("End date cannot be before start date");
+        return; // Stop form submission
+      }
+    };
+
+  };
 
 
   return (

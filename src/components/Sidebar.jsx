@@ -29,7 +29,7 @@ function Sidebar() {
     { path: "/", label: "Dashboard", icon: <FaHome /> },
     { path: "/project", label: "Projects", icon: <FaTags /> },
     { path: "/task", label: "Tasks", icon: <FaBox /> },
-    { path: "/users", label: "Users", icon: <FaUsers /> },
+    { path: "/user", label: "Users", icon: <FaUsers /> },
     { path: "/settings", label: "Settings", icon: <FaCog /> },
   ];
 
@@ -45,11 +45,14 @@ function Sidebar() {
     >
       {/* Profile Section */}
       <div className="text-center mb-4 mt-5">
-         <img
-          src={loggedUser?.avatar}
+        <img
+          src={loggedUser?.avatar || "/default-avatar.png"}
           alt="avatar"
           className="rounded-circle mb-2 shadow-sm"
+          width="80"
+          height="80"
         />
+
         <h6 className="fw-bold mb-0">{loggedUser?.name || "Admin User"}</h6>
         <small className="text-muted">
           {loggedUser?.email || "Administrator"}
@@ -62,9 +65,8 @@ function Sidebar() {
           <li className="nav-item mb-1" key={link.path}>
             <Link
               to={link.path}
-              className={`nav-link d-flex align-items-center ${
-                location.pathname === link.path ? "active-link" : "text-dark"
-              }`}
+              className={`nav-link d-flex align-items-center ${location.pathname === link.path ? "active-link" : "text-dark"
+                }`}
               style={{
                 borderRadius: "8px",
                 padding: "10px 14px",

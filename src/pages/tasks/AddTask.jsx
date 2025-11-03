@@ -21,7 +21,7 @@ const AddTask = ({ show, onClose, onSubmit }) => {
                 const proRes = await getAllProjects();
                 const userRes = await getAllUsers();
                 if (proRes.data.success) setProjects(proRes.data.projects);
-                 if (userRes.data.success) setUsers(userRes.data.users);
+                if (userRes.data.success) setUsers(userRes.data.users);
 
             } catch (error) {
                 toast.error("Failed to load projects");
@@ -48,14 +48,14 @@ const AddTask = ({ show, onClose, onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        
+
         if (!title.trim()) return alert("Please enter task title");
         if (!selectedProject) return alert("Please select a project");
         if (!selectedUser) return alert("Please select a user");
         if (!startDate) return alert("Please select start date");
         if (!endDate) return alert("Please select end date");
         if (!priority) return alert("Please select priority");
-    
+
 
         const taskData = {
             title,
@@ -70,15 +70,15 @@ const AddTask = ({ show, onClose, onSubmit }) => {
 
         onSubmit(taskData);
 
-         if (taskData.startDate && taskData.endDate) {
-    const start = new Date(taskData.startDate);
-    const end = new Date(taskData.endDate);
+        if (taskData.startDate && taskData.endDate) {
+            const start = new Date(taskData.startDate);
+            const end = new Date(taskData.endDate);
 
-    if (end < start) {
-      toast.error("End date cannot be before start date");
-      return; // Stop form submission
-    }
-  }
+            if (end < start) {
+                toast.error("End date cannot be before start date");
+                return; // Stop form submission
+            }
+        }
     };
 
     return (
@@ -129,9 +129,9 @@ const AddTask = ({ show, onClose, onSubmit }) => {
                             </select>
 
                             <select
-                            className="form-control mb-3"
+                                className="form-control mb-3"
                                 value={selectedUser}
-                             onChange={(e) => setSelectedUser(e.target.value)}>
+                                onChange={(e) => setSelectedUser(e.target.value)}>
                                 <option value="">Select user</option>
                                 {users.map((user) => (
                                     <option key={user._id} value={user._id}>

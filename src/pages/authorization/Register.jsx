@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { User, Mail, Lock, UserPlus, Phone } from "lucide-react";
+import { User, Mail, Lock, UserPlus, Image } from "lucide-react";
 import { AuthContext } from "../../context/AuthProvider";
 import "./Login.css"; 
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ const Register = () => {
   const [name, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const inputRef = useRef();
   const navigate = useNavigate();
   const { register } = useContext(AuthContext);
@@ -21,7 +22,7 @@ const Register = () => {
     event.preventDefault();
 
     try {
-      const message = await register(name, email, password);
+      const message = await register(name, email, password, avatar);
 
       if (message?.includes("success")) {
         toast("Registration successful! Please login.");
@@ -92,6 +93,33 @@ const Register = () => {
               required
             />
           </div>
+
+           <div className="mb-3">
+            <label className="form-label fw-semibold">
+              <Image size={18} className="me-2" />
+              Profile Image
+            </label>
+            <input
+              type="file"
+              className="form-control rounded-3"
+              accept="image/*"
+              onChange={(e) => setAvatar(e.target.files[0])}
+            />
+          </div>
+
+          {/* Preview (optional) */}
+          {avatar && (
+            <div className="text-center mb-3">
+              <img
+                src={URL.createObjectURL(avatar)}
+                alt="Preview"
+                width="100"
+                height="100"
+                style={{ borderRadius: "50%", objectFit: "cover" }}
+              />
+            </div>
+          )}
+
 
           <div className="form-check mb-3">
             <input type="checkbox" className="form-check-input" id="terms" required />
