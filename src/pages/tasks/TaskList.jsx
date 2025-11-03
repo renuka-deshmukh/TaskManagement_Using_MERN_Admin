@@ -12,13 +12,15 @@ const TaskList = () => {
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const tasksPerPage = 5;
 
     // ✅ Fetch all data
     const fetchData = async () => {
         try {
             const response = await getAllTasks();
             if (response.data.success) {
-                setTasks(response.data.tasks)
+                setTasks(response.data.tasks);
             } else {
                 toast.error("Failed to load tasks");
             }
@@ -32,11 +34,19 @@ const TaskList = () => {
         fetchData();
     }, []);
 
+    // ✅ Pagination logic
+    const indexOfLastTask = currentPage * tasksPerPage;
+    const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+    const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+    const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+    const handlePageChange = (page) => setCurrentPage(page);
+
     // ✅ Add task handler
     const handleAddTask = async (formData) => {
         try {
             const response = await createTask(formData);
-            toast.success(response.data.msg || "task added successfully!");
+            toast.success(response.data.msg || "Task added successfully!");
             setShowModal(false);
             fetchData();
         } catch (error) {
@@ -45,10 +55,39 @@ const TaskList = () => {
         }
     };
 
+    // Priority badge color
+    const getPriorityText = (priority) => {
+        switch (priority) {
+            case "High":
+                return <span style={{ color: "red", fontWeight: "600" }}>High</span>;
+            case "Medium":
+                return <span style={{ color: "orange", fontWeight: "600" }}>Medium</span>;
+            case "Low":
+                return <span style={{ color: "green", fontWeight: "600" }}>Low</span>;
+            default:
+                return <span style={{ color: "gray" }}>{priority}</span>;
+        }
+    };
+
+
+    const getStatusText = (status) => {
+        switch (status) {
+            case "Planned":
+                return <span style={{ color: "gray", fontWeight: "600" }}>Planned</span>;
+            case "In Progress":
+                return <span style={{ color: "#0d6efd", fontWeight: "600" }}>In Progress</span>; // blue
+            case "Completed":
+                return <span style={{ color: "green", fontWeight: "600" }}>Completed</span>;
+            default:
+                return <span style={{ color: "black" }}>{status}</span>;
+        }
+    };
+
+
     return (
-        <div className="card shadow-sm p-3 bg-white rounded">
+        <div className="card shadow-sm p-4 bg-white rounded" style={{ overflow: "hidden" }}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <h4 className="fw-bold">All task List</h4>
+                <h4 className="fw-bold mb-0">All Task List</h4>
                 <button
                     className="btn btn-primary d-flex align-items-center"
                     style={{
@@ -58,74 +97,103 @@ const TaskList = () => {
                     }}
                     onClick={() => setShowModal(true)}
                 >
-                    <FaPlus className="me-2" /> Add task
+                    <FaPlus className="me-2" /> Add Task
                 </button>
             </div>
 
-            {/* ✅ Table */}
-            <table className="table align-middle custom-table">
-                <thead>
-                    <tr>
-                        <th>Task</th>
-                        <th style={{width: "200px"}}>Description</th>
-                        <th>Project</th>
-                        <th>Assigned To</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+            {/* ✅ Scrollable responsive table */}
+            <div className="table-responsive">
+                <table className="table table-hover align-middle text-center custom-table mb-0">
+                    <thead className="table-light">
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Task</th>
+                            <th style={{ width: "220px" }}>Description</th>
+                            <th>Project</th>
+                            <th>Assigned To</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th style={{ width: "100px" }}>Action</th>
+                        </tr>
+                    </thead>
 
-                </thead>
-                <tbody>
-                    {tasks.length > 0 ? (
-                        tasks.map((task, i) => (
-                            <tr key={task._id || i}>
-                                <td className="fw-semibold">
-                                    {task.title}
-                                    {/* <div className="text-muted small">{task.description}</div> */}
-                                </td>
-                                <td>{task.description}</td>
-                                <td>{task.projectId?.name}</td>
-                                <td>{task.assignTo?.name}</td>
-                                <td>{task.startDate ? new Date(task.startDate).toLocaleDateString('en-GB') : '-'}</td>
-                                <td>{task.endDate ? new Date(task.endDate).toLocaleDateString('en-GB') : '-'}</td>
-
-                                <td>{task.priority}</td>
-                                <td>{task.status}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-sm btn-outline-primary me-2"
-                                        onClick={() => {
-                                            setSelectedTask(task);
-                                            setShowEditModal(true);
-                                        }}
-                                    >
-                                        <FaEdit />
-                                    </button>
-                                    <DeleteTask taskID={task._id} onDelete={fetchData} />
+                    <tbody>
+                        {currentTasks.length > 0 ? (
+                            currentTasks.map((task, i) => (
+                                <tr key={task._id || i}>
+                                    <td>{indexOfFirstTask + i + 1}</td>
+                                    <td className="fw-semibold text-start ps-3">{task.title}</td>
+                                    <td className="text-muted small text-start">{task.description}</td>
+                                    <td>{task.projectId?.name || "-"}</td>
+                                    <td>{task.assignTo?.name || "-"}</td>
+                                    <td>
+                                        {task.startDate
+                                            ? new Date(task.startDate).toLocaleDateString("en-GB")
+                                            : "-"}
+                                    </td>
+                                    <td>
+                                        {task.endDate
+                                            ? new Date(task.endDate).toLocaleDateString("en-GB")
+                                            : "-"}
+                                    </td>
+                                    <td>{getPriorityText(task.priority)}</td>
+                                    <td>{getStatusText(task.status)}</td>
+                                    <td>
+                                        <button
+                                            className="btn btn-sm btn-outline-primary me-2"
+                                            onClick={() => {
+                                                setSelectedTask(task);
+                                                setShowEditModal(true);
+                                            }}
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                        <DeleteTask taskID={task._id} onDelete={fetchData} />
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="9" className="text-center text-muted py-3">
+                                    No tasks available
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" className="text-center text-muted">
-                                No tasks available
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                    </tbody>
 
-            {/* ✅ Add task Modal */}
+                </table>
+            </div>
+
+            {/* ✅ Pagination */}
+            {totalPages > 1 && (
+                <div className="d-flex justify-content-center mt-3">
+                    <nav>
+                        <ul className="pagination mb-0">
+                            {Array.from({ length: totalPages }, (_, i) => (
+                                <li
+                                    key={i}
+                                    className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                                    onClick={() => handlePageChange(i + 1)}
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    <span className="page-link">{i + 1}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
+            )}
+
+            {/* ✅ Add Task Modal */}
             <AddTask
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onSubmit={handleAddTask}
             />
 
-            {/* ✅ Edit Modal */}
+            {/* ✅ Edit Task Modal */}
             <EditTask
                 show={showEditModal}
                 onClose={() => setShowEditModal(false)}
