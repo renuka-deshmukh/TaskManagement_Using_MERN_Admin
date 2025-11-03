@@ -2,7 +2,9 @@ import axiosInstance from "./axiosInstance";
 
 // Register
 export const registerUser = (adminData) =>
-  axiosInstance.post("/user/register", adminData);
+  axiosInstance.post("/user/register", adminData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
 // Login
 export const loginUser = (credentials) =>
