@@ -93,6 +93,7 @@ const ProjectList = () => {
       <table className="table align-middle custom-table">
         <thead>
           <tr>
+            <th>Sr.No</th>
             <th>Name</th>
             <th style={{ width: "220px" }}>Description</th>
             <th>Start Date</th>
@@ -106,6 +107,7 @@ const ProjectList = () => {
           {currentProjects.length > 0 ? (
             currentProjects.map((project, i) => (
               <tr key={project._id || i}>
+                <td>{indexOfFirstProject + i + 1}</td>
                 <td className="fw-semibold">
                   {project.name}
                   {/* <div className="text-muted small">{project.description}</div> */}

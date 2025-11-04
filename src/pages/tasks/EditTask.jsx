@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { updateTask } from '../../apis/taskApis';
+import { getAllProjects } from "../../apis/projectApis";
+import { getAllUsers } from "../../apis/userApis"
 import { toast } from 'react-toastify';
 
 const EditTask = ({ show, onClose, task, onUpdated }) => {
 
+  const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    projectId: "",
+    assignTo: "",
     startDate: "",
     endDate: "",
     priority: "",
@@ -18,6 +25,8 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
       setFormData({
         title: task.title || "",
         description: task.description || "",
+        projectId: task.projectId?._id || task.projectId || "",
+        assignTo: task.assignTo?._id || task.assignTo || "",   
         startDate: task.startDate?.split("T")[0] || "",
         endDate: task.endDate?.split("T")[0] || "",
         priority: task.priority || "Low",
@@ -26,6 +35,21 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
     }
   }, [task]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const proRes = await getAllProjects();
+        const userRes = await getAllUsers();
+        if (proRes.data.success) setProjects(proRes.data.projects);
+        if (userRes.data.success) setUsers(userRes.data.users);
+
+      } catch (error) {
+        toast.error("Failed to load projects");
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -33,15 +57,15 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     if (formData.startDate && formData.endDate) {
-        const start = new Date(formData.startDate);
-        const end = new Date(formData.endDate);
-    
-        if (end < start) {
-          toast.error("End date cannot be before start date");
-          return; // stop form submission
-        }
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+
+      if (end < start) {
+        toast.error("End date cannot be before start date");
+        return; // stop form submission
       }
+    }
 
     try {
       const response = await updateTask(task._id, formData)
@@ -66,7 +90,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
       className="modal show d-block"
       tabIndex="-1"
       role="dialog"
-      style={{ backgroundColor: "rgba(0,0,0,0.5)" }} 
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
     >
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div
@@ -105,6 +129,35 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
             />
 
             <div className="d-flex gap-3 mb-3">
+              <select
+                name="projectId"
+                className="form-control"
+                value={formData.projectId}
+                onChange={handleChange}
+              >
+                <option value="">-- Select Project --</option>
+                {projects.map((p) => (
+                  <option key={p._id} value={p._id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="assignTo"
+                className="form-control"
+                value={formData.assignTo}
+                onChange={handleChange}
+              >
+                 <option value="">Select user</option>
+                                {users.map((user) => (
+                                    <option key={user._id} value={user._id}>
+                                        {user.name}
+                                    </option>
+                                ))}
+              </select>
+            </div>
+
+            <div className="d-flex gap-3 mb-3">
               <input
                 type="Date"
                 name="startDate"
@@ -124,7 +177,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
             </div>
 
             <div className="d-flex gap-3 mb-3">
-               <select
+              <select
                 name="priority"
                 className="form-control"
                 value={formData.priority}
@@ -134,7 +187,7 @@ const EditTask = ({ show, onClose, task, onUpdated }) => {
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
               </select>
-               <select
+              <select
                 name="status"
                 className="form-control"
                 value={formData.status}

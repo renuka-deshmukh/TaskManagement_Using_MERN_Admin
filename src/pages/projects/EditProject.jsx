@@ -119,7 +119,10 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
                 placeholder="End Date"
                 className="form-control"
               />
-               <select
+            </div>
+
+            <div  className="d-flex gap-3 mb-3">
+              <select
                 name="status"
                 className="form-control"
                 value={formData.status}

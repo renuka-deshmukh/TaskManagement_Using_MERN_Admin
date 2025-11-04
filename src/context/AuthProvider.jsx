@@ -34,15 +34,21 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await loginUser({ email, password });
 
+
+
       if (res.data.success) {
+
+        if (res.data.role !== "admin") {
+          return { success: false, msg: "Access denied ❌ Only admin can login" };
+        }
         // ✅ Store token and user info
         localStorage.setItem("token", res.data.token);
         localStorage.setItem(
           "loggedInAdmin",
-          JSON.stringify({ email, name: res.data.name, user_id: res.data.user_id, avatar: avatarUrl  })
+          JSON.stringify({ email, name: res.data.name, role: res.data.role, user_id: res.data.user_id, avatar: res.data.avatar })
         );
 
-        setLoggedUser({ email, name: res.data.name, user_id: res.data.user_id,  avatar: avatarUrl  });
+        setLoggedUser({ email, name: res.data.name, role: res.data.role, user_id: res.data.user_id, avatar: res.data.avatar });
 
         // ✅ Return full response to handle in Login.jsx
         return { success: true, msg: res.data.msg };;

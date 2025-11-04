@@ -30,7 +30,6 @@ function Sidebar() {
     { path: "/project", label: "Projects", icon: <FaTags /> },
     { path: "/task", label: "Tasks", icon: <FaBox /> },
     { path: "/user", label: "Users", icon: <FaUsers /> },
-    { path: "/settings", label: "Settings", icon: <FaCog /> },
   ];
 
   return (
@@ -46,7 +45,7 @@ function Sidebar() {
       {/* Profile Section */}
       <div className="text-center mb-4 mt-5">
         <img
-          src={loggedUser?.avatar || "/default-avatar.png"}
+          src={loggedUser?.avatar}
           alt="avatar"
           className="rounded-circle mb-2 shadow-sm"
           width="80"

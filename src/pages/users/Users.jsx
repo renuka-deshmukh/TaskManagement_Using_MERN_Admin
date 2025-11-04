@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {getAllUsers } from "../../apis/userApis";
+import { getAllUsers } from "../../apis/userApis";
 import { toast } from "react-toastify";
+
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
+
 
 
   // ✅ Fetch all data
@@ -26,6 +30,13 @@ const Users = () => {
     fetchData();
   }, []);
 
+  const indexOfLastUser = currentPage * tasksPerPage;
+  const indexOfFirstUser = indexOfLastUser - tasksPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const totalPages = Math.ceil(users.length / tasksPerPage);
+
+  const handlePageChange = (page) => setCurrentPage(page);
+
   return (
     <div className="card shadow-sm p-3 bg-white rounded">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -44,17 +55,27 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users.length > 0 ? (
-            users.map((user, i) => (
+          {currentUsers.length > 0 ? (
+            currentUsers.map((user, i) => (
               <tr key={user._id || i}>
-                <td>{i + 1}</td>
-                <td>{user.avatar}</td>
+                <td>{indexOfFirstUser + i + 1}</td>
+                <td>
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <span>No Avatar</span>
+                  )}
+                </td>
                 <td className="fw-semibold">
                   {user.name}
                 </td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>
-               
+
               </tr>
             ))
           ) : (
@@ -66,6 +87,26 @@ const Users = () => {
           )}
         </tbody>
       </table>
+
+      {/* ✅ Pagination */}
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-center mt-3">
+          <nav>
+            <ul className="pagination mb-0">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <li
+                  key={i}
+                  className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                  onClick={() => handlePageChange(i + 1)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <span className="page-link">{i + 1}</span>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      )}
 
     </div>
   );
