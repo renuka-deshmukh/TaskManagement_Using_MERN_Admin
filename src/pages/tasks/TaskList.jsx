@@ -6,14 +6,38 @@ import AddTask from "./AddTask";
 import DeleteTask from "./DeleteTask";
 import EditTask from "./EditTask";
 import "./Tasks.css";
+import { getAllUsers } from "../../apis/userApis";
 
 const TaskList = () => {
     const [tasks, setTasks] = useState([]);
+    const [users, setUsers] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const tasksPerPage = 5;
+
+    // ✅ Fetch user data 
+    const fetchUserData = async () => {
+        try {
+            const response = await getAllUsers();
+            if (response.data.success) {
+                setUsers(response.data.users);
+
+            }
+            else {
+                toast.error("Failed to load users");
+
+            }
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            toast.error("Error fetching users");
+        }
+    };
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
 
     // ✅ Fetch all data
     const fetchData = async () => {
@@ -33,6 +57,11 @@ const TaskList = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if (tasks.length > 0) console.log("TASK DATA:", tasks[0]);
+    }, [tasks]);
+
 
     // ✅ Pagination logic
     const indexOfLastTask = currentPage * tasksPerPage;
@@ -107,7 +136,7 @@ const TaskList = () => {
                     <thead className="table-light">
                         <tr>
                             <th>Sr.No</th>
-                            <th>Task</th>
+                            <th style={{ width: "170px" }}>Task</th>
                             <th style={{ width: "220px" }}>Description</th>
                             <th>Project</th>
                             <th>Assigned To</th>
@@ -115,7 +144,7 @@ const TaskList = () => {
                             <th>End Date</th>
                             <th>Priority</th>
                             <th>Status</th>
-                            <th style={{ width: "100px" }}>Action</th>
+                            <th style={{ width: "120px" }}>Action</th>
                         </tr>
                     </thead>
 
@@ -127,7 +156,53 @@ const TaskList = () => {
                                     <td className="fw-semibold text-start ps-3">{task.title}</td>
                                     <td className="text-muted small text-start">{task.description}</td>
                                     <td>{task.projectId?.name || "-"}</td>
-                                    <td>{task.assignTo?.name || "-"}</td>
+                                    <td>
+                                        {(() => {
+                                            const assignedUser = users.find(u => u._id === task.assignTo?._id);
+
+                                            return (
+                                                <div className="d-flex align-items-center justify-content-center gap-2">
+
+                                                    {/* ✅ Avatar */}
+                                                    {assignedUser?.avatar ? (
+                                                        <img
+                                                            src={assignedUser.avatar}
+                                                            alt="avatar"
+                                                            style={{
+                                                                width: "40px",
+                                                                height: "40px",
+                                                                borderRadius: "50%",
+                                                                objectFit: "cover"
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                width: "40px",
+                                                                height: "40px",
+                                                                borderRadius: "50%",
+                                                                background: "#ddd",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                fontSize: "11px",
+                                                                color: "#555"
+                                                            }}
+                                                        >
+                                                            NO
+                                                        </div>
+                                                    )}
+
+                                                    {/* ✅ User Name */}
+                                                    <span className="fw-semibold">
+                                                        {assignedUser?.name || task.assignTo?.name || "-"}
+                                                    </span>
+
+                                                </div>
+                                            );
+                                        })()}
+                                    </td>
+
                                     <td>
                                         {task.startDate
                                             ? new Date(task.startDate).toLocaleDateString("en-GB")
@@ -166,7 +241,7 @@ const TaskList = () => {
                 </table>
             </div>
 
-            {/* ✅ Pagination */}
+            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="d-flex justify-content-center mt-3">
                     <nav>
@@ -186,14 +261,14 @@ const TaskList = () => {
                 </div>
             )}
 
-            {/* ✅ Add Task Modal */}
+            {/* Add Task Modal */}
             <AddTask
                 show={showModal}
                 onClose={() => setShowModal(false)}
                 onSubmit={handleAddTask}
             />
 
-            {/* ✅ Edit Task Modal */}
+            {/* Edit Task Modal */}
             <EditTask
                 show={showEditModal}
                 onClose={() => setShowEditModal(false)}

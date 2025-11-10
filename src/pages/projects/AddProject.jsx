@@ -59,52 +59,80 @@ const AddProject = ({ show, onClose, onSubmit }) => {
             </div>
 
             <div className="modal-body p-4">
-              <input
-                type="text"
-                className="form-control mb-3"
-                placeholder="Project Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <textarea
-                className="form-control mb-3"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-              <input
-                type="date"
-                className="form-control mb-3"
-                placeholder="Start Date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-              <input
-                type="date"
-                className="form-control mb-3"
-                placeholder="End Date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
 
-              {/* ✅ Show who is adding (read-only field) */}
-              <input
-                type="text"
-                className="form-control mb-3"
-                value={loggedInUser?.name || ""}
-                readOnly
-              />
+              {/* Project Name */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Project Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter project name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
 
-              <select
-                className="form-control mb-3"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="Planned">Planned</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-              </select>
+              {/* Description */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Description</label>
+                <textarea
+                  className="form-control"
+                  placeholder="Enter project description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  rows="3"
+                />
+              </div>
+
+              {/* Start Date */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Start Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+
+              {/* End Date */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">End Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+
+              {/* Created By (read-only) */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Created By</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={loggedInUser?.name || ""}
+                  readOnly
+                />
+              </div>
+
+              {/* Status */}
+              <div className="mb-3">
+                <label className="form-label fw-semibold">Status</label>
+                <select
+                  className="form-control"
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="Planned">Planned</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+
             </div>
+
 
             <div className="modal-footer border-0">
               <button type="button" className="btn btn-outline-secondary" onClick={onClose}>

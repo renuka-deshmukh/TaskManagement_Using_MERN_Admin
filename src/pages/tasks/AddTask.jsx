@@ -99,84 +99,117 @@ const AddTask = ({ show, onClose, onSubmit }) => {
                         </div>
 
                         <div className="modal-body p-4">
-                            <input
-                                type="text"
-                                className="form-control mb-3"
-                                placeholder="Task Name"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                            />
 
-                            <textarea
-                                className="form-control mb-3"
-                                placeholder="Description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
+                            {/* Task Name */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Task Name</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    placeholder="Enter task name"
+                                />
+                            </div>
 
-                            {/* ✅ Project Dropdown */}
-                            <select
-                                className="form-control mb-3"
-                                value={selectedProject}
-                                onChange={(e) => setSelectedProject(e.target.value)}
-                            >
-                                <option value="">-- Select Project --</option>
-                                {projects.map((p) => (
-                                    <option key={p._id} value={p._id}>
-                                        {p.name}
-                                    </option>
-                                ))}
-                            </select>
+                            {/* Description */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Description</label>
+                                <textarea
+                                    className="form-control"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    placeholder="Enter description"
+                                    rows="3"
+                                />
+                            </div>
 
-                            <select
-                                className="form-control mb-3"
-                                value={selectedUser}
-                                onChange={(e) => setSelectedUser(e.target.value)}>
-                                <option value="">Select user</option>
-                                {users.map((user) => (
-                                    <option key={user._id} value={user._id}>
-                                        {user.name}
-                                    </option>
-                                ))}
-                            </select>
+                            {/* Project Dropdown */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Select Project</label>
+                                <select
+                                    className="form-control"
+                                    value={selectedProject}
+                                    onChange={(e) => setSelectedProject(e.target.value)}
+                                >
+                                    <option value="">-- Select Project --</option>
+                                    {projects.map((p) => (
+                                        <option key={p._id} value={p._id}>
+                                            {p.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                            <input
-                                type="date"
-                                className="form-control mb-3"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
+                            {/* User Dropdown */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Assign To User</label>
+                                <select
+                                    className="form-control"
+                                    value={selectedUser}
+                                    onChange={(e) => setSelectedUser(e.target.value)}
+                                >
+                                    <option value="">-- Select User --</option>
+                                    {users.map((user) => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                            <input
-                                type="date"
-                                className="form-control mb-3"
-                                value={endDate}
-                                //  min={taskData.startDate} 
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
+                            {/* Start Date */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Start Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+                            </div>
+
+                            {/* End Date */}
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">End Date</label>
+                                <input
+                                    type="date"
+                                    className="form-control"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                />
+                            </div>
 
                             {/* Priority Dropdown */}
-                            <select
-                                className="form-control mb-3"
-                                value={priority}
-                                onChange={(e) => setPriority(e.target.value)} // ✅ fixed
-                            >
-                                <option value="Low">Low</option>
-                                <option value="Medium">Medium</option>
-                                <option value="High">High</option>
-                            </select>
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Priority</label>
+                                <select
+                                    className="form-control"
+                                    value={priority}
+                                    onChange={(e) => setPriority(e.target.value)}
+                                >
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
 
                             {/* Status Dropdown */}
-                            <select
-                                className="form-control mb-3"
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value)}
-                            >
-                                <option value="Planned">Planned</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
-                            </select>
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Status</label>
+                                <select
+                                    className="form-control"
+                                    value={status}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                >
+                                    <option value="Planned">Planned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+
                         </div>
+
 
                         <div className="modal-footer border-0">
                             <button

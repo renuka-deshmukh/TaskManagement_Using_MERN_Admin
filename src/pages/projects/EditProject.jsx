@@ -11,7 +11,7 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
     endDate: "",
     status: ""
   });
-  
+
   useEffect(() => {
     if (project) {
       setFormData({
@@ -32,14 +32,14 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
     e.preventDefault();
 
     if (formData.startDate && formData.endDate) {
-    const start = new Date(formData.startDate);
-    const end = new Date(formData.endDate);
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
 
-    if (end < start) {
-      toast.error("End date cannot be before start date");
-      return; // stop form submission
+      if (end < start) {
+        toast.error("End date cannot be before start date");
+        return; // stop form submission
+      }
     }
-  }
 
     try {
       const response = await updateProject(project._id, formData)
@@ -84,44 +84,63 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
 
           {/* Form */}
           <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Project Name"
-              className="form-control mb-3"
-            />
 
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Description"
-              className="form-control mb-3"
-              rows="3"
-            />
-
-            <div className="d-flex gap-3 mb-3">
+            {/* Project Name */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Project Name</label>
               <input
-                type="Date"
-                name="startDate"
-                value={formData.startDate}
+                type="text"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
-                placeholder="Start Date"
-                className="form-control"
-              />
-              <input
-                type="Date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleChange}
-                placeholder="End Date"
+                placeholder="Enter project name"
                 className="form-control"
               />
             </div>
 
-            <div  className="d-flex gap-3 mb-3">
+            {/* Description */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter description"
+                className="form-control"
+                rows="3"
+              />
+            </div>
+
+            {/* Dates Row */}
+            <div className="d-flex gap-3 mb-3">
+
+              <div className="w-100">
+                <label className="form-label fw-semibold">Start Date</label>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+
+              <div className="w-100">
+                <label className="form-label fw-semibold">End Date</label>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  className="form-control"
+                />
+              </div>
+
+            </div>
+
+            {/* Status */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Status</label>
               <select
                 name="status"
                 className="form-control"
@@ -143,6 +162,7 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
               >
                 Cancel
               </button>
+
               <button
                 type="submit"
                 className="btn"
@@ -155,7 +175,9 @@ const UpdateProject = ({ show, onClose, project, onUpdated }) => {
                 Save
               </button>
             </div>
+
           </form>
+
         </div>
       </div>
     </div>

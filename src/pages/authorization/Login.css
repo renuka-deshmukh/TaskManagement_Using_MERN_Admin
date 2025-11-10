@@ -65,3 +65,24 @@
   color: #888888;
   font-weight: 500;
 }
+
+.login-card {
+  max-height: 90vh;
+}
+
+.login-title {
+  font-size: 22px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.login-or {
+  color: #aaa;
+}
+
+.form-control {
+  font-size: 14px;
+}
