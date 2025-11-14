@@ -1,0 +1,61 @@
+/* Make card and table full width on desktop */
+.card {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.custom-table {
+  width: 100% !important;
+  display: table;
+}
+
+
+/* Keep mobile styles as-is */
+@media (max-width: 768px) {
+  .custom-table {
+    display: block;
+  }
+
+  .custom-table thead {
+    display: none;
+  }
+
+  .custom-table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .custom-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #444;
+  }
+
+  .user-avatar-mobile {
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .page-link {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+  }
+}
+
+.debug-border {
+  outline: 3px solid red !important;
+}

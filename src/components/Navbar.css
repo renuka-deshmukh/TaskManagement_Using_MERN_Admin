@@ -1,0 +1,13 @@
+/* Default navbar height (mobile) */
+.navbar {
+  height: 60px;
+}
+
+/* Laptop and Desktop (large screens) */
+@media (min-width: 992px) {
+  .navbar {
+    height: 70px !important;   /* Increase height here */
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import './AddProject.css'
 
 const AddProject = ({ show, onClose, onSubmit }) => {
   const [name, setName] = useState("");

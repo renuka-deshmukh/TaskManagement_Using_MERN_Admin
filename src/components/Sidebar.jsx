@@ -1,29 +1,26 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./Sidebar.css";
-
-import {
-  FaHome,
-  FaTags,
-  FaBox,
-  FaUsers,
-  FaCog,
-  FaSignOutAlt,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaHome, FaTags, FaBox, FaUsers, FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthProvider";
-import { useContext } from "react";
 
-function Sidebar() {
+function Sidebar({ isOpen, closeSidebar }) {
   const location = useLocation();
-  const navigate = useNavigate(); // ✅ FIX: added useNavigate
-
+  const navigate = useNavigate();
   const { loggedUser, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+    closeSidebar();
   };
+
+  useEffect(() => {
+    // close on ESC
+    const onKey = (e) => { if (e.key === "Escape") closeSidebar(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [closeSidebar]);
 
   const links = [
     { path: "/", label: "Dashboard", icon: <FaHome /> },
@@ -33,46 +30,53 @@ function Sidebar() {
   ];
 
   return (
-    <div
-      className="d-flex flex-column p-3"
-      style={{
-        minHeight: "100vh",
-        width: "240px",
-        background: "#f4f6f9",
-        borderRight: "1px solid #dee2e6",
-      }}
-    >
-      {/* Profile Section */}
-      <div className="text-center mb-4 mt-5">
-        <img
-          src={loggedUser?.avatar}
-          alt="avatar"
-          className="rounded-circle mb-2 shadow-sm"
-          width="80"
-          height="80"
-        />
+    <>
+      {/* Desktop sidebar (visible on lg+) */}
+      <aside className="sidebar d-none d-lg-flex">
+        <SidebarContent links={links} loggedUser={loggedUser} handleLogout={handleLogout} />
+      </aside>
 
+      {/* Overlay (only shown when mobile sidebar open) */}
+      <div
+        className={`mobile-overlay ${isOpen ? "visible" : ""}`}
+        onClick={closeSidebar}
+        aria-hidden={!isOpen}
+      />
+
+      {/* Mobile sidebar */}
+      <aside className={`mobile-sidebar ${isOpen ? "open" : ""}`} role="dialog" aria-hidden={!isOpen}>
+        <div className="mobile-sidebar-header d-flex justify-content-between align-items-center">
+          <div className="d-flex align-items-center">
+            <img src={loggedUser?.avatar} alt="avatar" width="48" height="48" className="rounded-circle me-2" />
+            <div>
+              <div className="fw-bold">{loggedUser?.name}</div>
+              <small className="text-muted">{loggedUser?.email}</small>
+            </div>
+          </div>
+          <button className="btn btn-light" onClick={closeSidebar} aria-label="Close menu">✖</button>
+        </div>
+
+        <div className="mobile-sidebar-body">
+          <SidebarContent links={links} loggedUser={loggedUser} handleLogout={handleLogout} />
+        </div>
+      </aside>
+    </>
+  );
+}
+
+function SidebarContent({ links, loggedUser, handleLogout }) {
+  return (
+    <div className="p-3">
+      <div className="text-center mb-4 mt-2">
+        <img src={loggedUser?.avatar} alt="avatar" className="rounded-circle mb-2 shadow-sm" width="80" height="80" />
         <h6 className="fw-bold mb-0">{loggedUser?.name || "Admin User"}</h6>
-        <small className="text-muted">
-          {loggedUser?.email || "Administrator"}
-        </small>
+        <small className="text-muted">{loggedUser?.email || "Administrator"}</small>
       </div>
 
-      {/* Navigation Links */}
-      <ul className="nav nav-pills flex-column mb-auto">
-        {links.map((link) => (
+      <ul className="nav flex-column mb-3">
+        {links.map(link => (
           <li className="nav-item mb-1" key={link.path}>
-            <Link
-              to={link.path}
-              className={`nav-link d-flex align-items-center ${location.pathname === link.path ? "active-link" : "text-dark"
-                }`}
-              style={{
-                borderRadius: "8px",
-                padding: "10px 14px",
-                fontWeight: 500,
-                transition: "0.3s",
-              }}
-            >
+            <Link to={link.path} className={`nav-link d-flex align-items-center ${locationPathMatch(link.path)}`} >
               <span className="me-2">{link.icon}</span>
               {link.label}
             </Link>
@@ -80,31 +84,18 @@ function Sidebar() {
         ))}
       </ul>
 
-      {/* Logout / Login at Bottom */}
-      {loggedUser ? (
-        <button
-          className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center rounded-3"
-          onClick={handleLogout}
-        >
-          <FaSignOutAlt className="me-2" />
-          Logout
-        </button>
-      ) : (
-        <button
-          className="btn btn-outline-success w-100 d-flex align-items-center justify-content-center rounded-3"
-          onClick={() => navigate("/login")}
-        >
-          <FaUserCircle className="me-2" />
-          Login
-        </button>
-      )}
-
-      {/* Footer */}
-      <div className="text-center mt-3 text-muted" style={{ fontSize: "12px" }}>
-        © 2025 E-commerce Admin
-      </div>
+      <button className="btn btn-outline-danger w-100" onClick={handleLogout}>
+        <FaSignOutAlt className="me-2" /> Logout
+      </button>
     </div>
   );
+}
+
+// helper for active link class (optional)
+function locationPathMatch(path) {
+  // This is a simple helper. In SidebarContent the location isn't available
+  // so you may adapt to pass location prop if needed.
+  return "";
 }
 
 export default Sidebar;

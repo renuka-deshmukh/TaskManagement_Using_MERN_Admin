@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers } from "../../apis/userApis";
 import { toast } from "react-toastify";
+import './Users.css'
 
 
 const Users = () => {
@@ -55,37 +56,44 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {currentUsers.length > 0 ? (
-            currentUsers.map((user, i) => (
-              <tr key={user._id || i}>
-                <td>{indexOfFirstUser + i + 1}</td>
-                <td>
-                  {user.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <span>No Avatar</span>
-                  )}
-                </td>
-                <td className="fw-semibold">
-                  {user.name}
-                </td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
+  {currentUsers.length > 0 ? (
+    currentUsers.map((user, i) => (
+      <tr key={user._id || i}>
 
-              </tr>
-            ))
+        <td data-label="Sr.No">{indexOfFirstUser + i + 1}</td>
+
+        <td data-label="Avatar">
+          {user.avatar ? (
+            <img
+              src={user.avatar}
+              alt={user.name}
+              className="user-avatar-mobile"
+              style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }}
+            />
           ) : (
-            <tr>
-              <td colSpan="6" className="text-center text-muted">
-                No Users available
-              </td>
-            </tr>
+            <span>No Avatar</span>
           )}
-        </tbody>
+        </td>
+
+        <td data-label="Name" className="fw-semibold">
+          {user.name}
+        </td>
+
+        <td data-label="Email">{user.email}</td>
+
+        <td data-label="Role">{user.role}</td>
+
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan="6" className="text-center text-muted">
+        No Users available
+      </td>
+    </tr>
+  )}
+</tbody>
+
       </table>
 
       {/* ✅ Pagination */}

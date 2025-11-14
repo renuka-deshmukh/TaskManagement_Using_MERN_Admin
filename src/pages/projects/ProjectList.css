@@ -1,0 +1,70 @@
+
+/* Table responsive wrapper */
+.custom-table {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* Reduce padding in table on mobile */
+@media (max-width: 768px) {
+  .custom-table thead {
+    display: none;
+  }
+
+  .custom-table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .custom-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .custom-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #444;
+  }
+
+  /* Description text hide overflow */
+  .custom-table td:nth-child(3) {
+    max-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Action buttons inline */
+  .custom-table td:last-child {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  h4.fw-bold {
+    font-size: 18px;
+  }
+
+  .btn-primary {
+    padding: 6px 10px !important;
+    font-size: 13px;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .page-link {
+    padding: 5px 10px !important;
+    font-size: 13px;
+  }
+}

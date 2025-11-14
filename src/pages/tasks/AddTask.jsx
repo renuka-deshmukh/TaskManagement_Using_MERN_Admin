@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllProjects } from "../../apis/projectApis";
 import { getAllUsers } from "../../apis/userApis"
 import { toast } from "react-toastify";
+import './AddTask.css'
 
 const AddTask = ({ show, onClose, onSubmit }) => {
     const [title, setTitle] = useState("");

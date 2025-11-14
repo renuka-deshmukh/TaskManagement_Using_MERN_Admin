@@ -151,19 +151,32 @@ const TaskList = () => {
                     <tbody>
                         {currentTasks.length > 0 ? (
                             currentTasks.map((task, i) => (
-                                <tr key={task._id || i}>
-                                    <td>{indexOfFirstTask + i + 1}</td>
-                                    <td className="fw-semibold text-start ps-3">{task.title}</td>
-                                    <td className="text-muted small text-start">{task.description}</td>
-                                    <td>{task.projectId?.name || "-"}</td>
-                                    <td>
+                                <tr key={task._id || i} className="task-row">
+
+                                    <td data-label="Sr.No">
+                                        {indexOfFirstTask + i + 1}
+                                    </td>
+
+                                    <td data-label="Task" className="fw-semibold text-start ps-3">
+                                        {task.title}
+                                    </td>
+
+                                    <td data-label="Description" className="text-muted small text-start">
+                                        {task.description || "-"}
+                                    </td>
+
+                                    <td data-label="Project">
+                                        {task.projectId?.name || "-"}
+                                    </td>
+
+                                    <td data-label="Assigned To">
                                         {(() => {
                                             const assignedUser = users.find(u => u._id === task.assignTo?._id);
 
                                             return (
                                                 <div className="d-flex align-items-center justify-content-center gap-2">
 
-                                                    {/* ✅ Avatar */}
+                                                    {/* Avatar */}
                                                     {assignedUser?.avatar ? (
                                                         <img
                                                             src={assignedUser.avatar}
@@ -193,7 +206,7 @@ const TaskList = () => {
                                                         </div>
                                                     )}
 
-                                                    {/* ✅ User Name */}
+                                                    {/* User Name */}
                                                     <span className="fw-semibold">
                                                         {assignedUser?.name || task.assignTo?.name || "-"}
                                                     </span>
@@ -203,19 +216,27 @@ const TaskList = () => {
                                         })()}
                                     </td>
 
-                                    <td>
+                                    <td data-label="Start Date">
                                         {task.startDate
                                             ? new Date(task.startDate).toLocaleDateString("en-GB")
                                             : "-"}
                                     </td>
-                                    <td>
+
+                                    <td data-label="End Date">
                                         {task.endDate
                                             ? new Date(task.endDate).toLocaleDateString("en-GB")
                                             : "-"}
                                     </td>
-                                    <td>{getPriorityText(task.priority)}</td>
-                                    <td>{getStatusText(task.status)}</td>
-                                    <td>
+
+                                    <td data-label="Priority">
+                                        {getPriorityText(task.priority)}
+                                    </td>
+
+                                    <td data-label="Status">
+                                        {getStatusText(task.status)}
+                                    </td>
+
+                                    <td data-label="Action">
                                         <button
                                             className="btn btn-sm btn-outline-primary me-2"
                                             onClick={() => {
@@ -225,9 +246,12 @@ const TaskList = () => {
                                         >
                                             <FaEdit />
                                         </button>
+
                                         <DeleteTask taskID={task._id} onDelete={fetchData} />
                                     </td>
+
                                 </tr>
+
                             ))
                         ) : (
                             <tr>

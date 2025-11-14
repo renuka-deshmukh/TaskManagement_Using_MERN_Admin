@@ -1,6 +1,4 @@
-
-
-/* Sidebar background & layout */
+/* Desktop sidebar */
 .sidebar {
   min-height: 100vh;
   width: 240px;
@@ -9,24 +7,66 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  z-index: 100;
 }
 
-/* Navigation links */
-.sidebar .nav-link {
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-weight: 500;
-  transition: 0.3s;
-  color: #495057 !important;
+/* Mobile overlay */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  z-index: 998;
+}
+.mobile-overlay.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
-.sidebar .nav-link:hover {
-  background-color: #e9ecef;
-  color: #0d6efd !important;
+/* Mobile sidebar (hidden by default) */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100vh;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  padding: 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transition: left 0.25s ease;
+  z-index: 999;
+  display: none;
 }
 
-/* Active link */
-.active-link {
-  background-color: #0d6efd !important;
-  color: #fff !important;
+/* Show mobile sidebar on small screens */
+@media (max-width: 991.98px) {
+  .mobile-sidebar {
+    display: block;
+  }
+}
+
+/* opened state */
+.mobile-sidebar.open {
+  left: 0;
+}
+
+/* header inside mobile sidebar */
+.mobile-sidebar-header {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* body */
+.mobile-sidebar-body {
+  padding: 12px;
+  overflow-y: auto;
+  height: calc(100vh - 72px);
+}
+
+/* small helper for links */
+.mobile-sidebar .nav-link {
+  color: #333;
 }
